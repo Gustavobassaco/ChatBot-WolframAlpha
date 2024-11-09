@@ -8,13 +8,13 @@ app.use(bodyParser.json());
 
 // Função para chamar a API do LibreTranslate
 async function consultaLibreTranslate(input) {
-    const url = 'https://libretranslate.de/translate'; // Endpoint público do LibreTranslate
+    const url = 'https://translate.argosopentech.com/translate'; // Novo servidor alternativo
 
     try {
         const response = await axios.post(url, {
             q: input,
-            source: 'auto', // Detecta o idioma automaticamente
-            target: 'en', // Traduz para o inglês (você pode mudar conforme necessário)
+            source: 'auto', // Detecta automaticamente o idioma
+            target: 'en',   // Traduz para inglês
             format: 'text'
         });
 
@@ -24,6 +24,7 @@ async function consultaLibreTranslate(input) {
         return 'Desculpe, não consegui traduzir isso.';
     }
 }
+
 
 // Função para chamar a API do Wolfram Alpha
 async function consultaWolfram(input) {
