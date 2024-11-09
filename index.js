@@ -33,6 +33,10 @@ app.post('/webhook', async (req, res) => {
     });
 });
 
+app.get('/', (req, res) => {
+    res.send('Bem-vindo ao chatbot do Wolfram Alpha!');
+});
+
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
