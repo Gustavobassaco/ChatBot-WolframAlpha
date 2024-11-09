@@ -1,0 +1,16 @@
+# Dependências do Node.js
+node_modules/
+
+# Configurações do ambiente
+.env
+
+# Logs
+logs/
+*.log
+
+# Cache de compilação
+dist/
+build/
+
+# Outros arquivos de sistema
+.DS_Store
