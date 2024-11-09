@@ -2,19 +2,36 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 require('dotenv').config();
-const translate = require('google-translate-api');
+const { TranslationServiceClient } = require('@google-cloud/translate');
 
 const app = express();
 app.use(bodyParser.json());
 
 const WOLFRAM_APP_ID = process.env.WOLFRAM_APP_ID;
 
+// Instância do cliente de tradução
+const client = new TranslationServiceClient();
+
+// Função para traduzir o texto
+async function traduzirTexto(input) {
+    const projectId = 'YOUR_PROJECT_ID'; // Substitua pelo seu ID do projeto Google Cloud
+    const location = 'global';
+    
+    const [response] = await client.translateText({
+        parent: client.locationPath(projectId, location),
+        contents: [input],
+        targetLanguageCode: 'en',
+    });
+
+    return response.translations[0].translatedText;
+}
+
 // Função para chamar a API do Wolfram Alpha
 async function consultaWolfram(input) {
-    const query =  await translate(input, { to: 'en' });
-    console.log(query.text);
+    const query = await traduzirTexto(input);
+    console.log(query);
 
-    const url = `http://api.wolframalpha.com/v1/result?i=${encodeURIComponent(query.text)}&appid=${WOLFRAM_APP_ID}`;
+    const url = `http://api.wolframalpha.com/v1/result?i=${encodeURIComponent(query)}&appid=${WOLFRAM_APP_ID}`;
     try {
         const response = await axios.get(url);
         return response.data;
@@ -45,4 +62,3 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
-
