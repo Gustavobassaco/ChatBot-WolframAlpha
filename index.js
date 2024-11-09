@@ -6,9 +6,9 @@ require('dotenv').config();
 const app = express();
 app.use(bodyParser.json());
 
-// Função para chamar a API do LibreTranslate
+// Função para chamar a API do LibreTranslate localmente
 async function consultaLibreTranslate(input) {
-    const url = 'https://translate.argosopentech.com/translate'; // Novo servidor alternativo
+    const url = 'http://localhost:5000/translate'; // URL da instância local do Docker
 
     try {
         const response = await axios.post(url, {
@@ -24,7 +24,6 @@ async function consultaLibreTranslate(input) {
         return 'Desculpe, não consegui traduzir isso.';
     }
 }
-
 
 // Função para chamar a API do Wolfram Alpha
 async function consultaWolfram(input) {
