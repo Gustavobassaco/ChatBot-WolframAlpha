@@ -12,7 +12,9 @@ const WOLFRAM_APP_ID = process.env.WOLFRAM_APP_ID;
 // Função para chamar a API do Wolfram Alpha
 async function consultaWolfram(input) {
     const query =  await translate(input, { to: 'en' });
-    const url = `http://api.wolframalpha.com/v1/result?i=${encodeURIComponent(query)}&appid=${WOLFRAM_APP_ID}`;
+    console.log(query.text);
+
+    const url = `http://api.wolframalpha.com/v1/result?i=${encodeURIComponent(query.text)}&appid=${WOLFRAM_APP_ID}`;
     try {
         const response = await axios.get(url);
         return response.data;
