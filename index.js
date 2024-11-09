@@ -2,36 +2,36 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 require('dotenv').config();
-const { TranslationServiceClient } = require('@google-cloud/translate');
 
 const app = express();
 app.use(bodyParser.json());
 
-const WOLFRAM_APP_ID = process.env.WOLFRAM_APP_ID;
+// Função para chamar a API do LibreTranslate
+async function consultaLibreTranslate(input) {
+    const url = 'https://libretranslate.de/translate'; // Endpoint público do LibreTranslate
 
-// Instância do cliente de tradução
-const client = new TranslationServiceClient();
+    try {
+        const response = await axios.post(url, {
+            q: input,
+            source: 'auto', // Detecta o idioma automaticamente
+            target: 'en', // Traduz para o inglês (você pode mudar conforme necessário)
+            format: 'text'
+        });
 
-// Função para traduzir o texto
-async function traduzirTexto(input) {
-    const projectId = 'YOUR_PROJECT_ID'; // Substitua pelo seu ID do projeto Google Cloud
-    const location = 'global';
-    
-    const [response] = await client.translateText({
-        parent: client.locationPath(projectId, location),
-        contents: [input],
-        targetLanguageCode: 'en',
-    });
-
-    return response.translations[0].translatedText;
+        return response.data.translatedText;
+    } catch (error) {
+        console.error('Erro ao consultar o LibreTranslate:', error);
+        return 'Desculpe, não consegui traduzir isso.';
+    }
 }
 
 // Função para chamar a API do Wolfram Alpha
 async function consultaWolfram(input) {
-    const query = await traduzirTexto(input);
-    console.log(query);
+    const respostaTraduzida = await consultaLibreTranslate(input); // Traduz a pergunta antes de enviar para Wolfram Alpha
+    console.log(`Pergunta traduzida: ${respostaTraduzida}`);
 
-    const url = `http://api.wolframalpha.com/v1/result?i=${encodeURIComponent(query)}&appid=${WOLFRAM_APP_ID}`;
+    const url = `http://api.wolframalpha.com/v1/result?i=${encodeURIComponent(respostaTraduzida)}&appid=${process.env.WOLFRAM_APP_ID}`;
+
     try {
         const response = await axios.get(url);
         return response.data;
@@ -45,7 +45,7 @@ async function consultaWolfram(input) {
 app.post('/webhook', async (req, res) => {
     const query = req.body.queryResult.queryText; // Obter a pergunta do usuário
 
-    // Consultar o Wolfram Alpha com a pergunta
+    // Consultar o Wolfram Alpha com a pergunta traduzida
     const respostaWolfram = await consultaWolfram(query);
 
     // Responder ao Dialogflow
