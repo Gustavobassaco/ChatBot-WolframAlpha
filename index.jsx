@@ -1,11 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
+require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json());
 
-const WOLFRAM_APP_ID = 'G7W578-W65V7AAYEE';
+const WOLFRAM_APP_ID = process.env.WOLFRAM_APP_ID;
 
 // Função para chamar a API do Wolfram Alpha
 async function consultaWolfram(query) {
