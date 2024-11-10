@@ -1,8 +1,10 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const axios = require('axios');
-require('dotenv').config();
-const translate = require('translate');
+import express from 'express';
+import bodyParser from 'body-parser';
+import axios from 'axios';
+import dotenv from 'dotenv';
+import translate from 'translate';
+
+dotenv.config();
 
 translate.engine = 'libre'; // Configura para usar o LibreTranslate
 translate.from = 'auto'; // Detecta automaticamente o idioma
@@ -30,12 +32,10 @@ async function consultaWolfram(input) {
 
 // Endpoint para o webhook do Dialogflow
 app.post('/webhook', async (req, res) => {
-    const query = req.body.queryResult.queryText; // Obter a pergunta do usuário
+    const query = req.body.queryResult.queryText;
 
-    // Consultar o Wolfram Alpha com a pergunta
     const respostaWolfram = await consultaWolfram(query);
 
-    // Responder ao Dialogflow
     return res.json({
         fulfillmentText: respostaWolfram,
     });
