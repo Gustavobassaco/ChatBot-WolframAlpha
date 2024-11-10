@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const WOLFRAM_APP_ID = process.env.WOLFRAM_APP_ID;
-const TRANSLATE_API_URL = process.env.TRANSLATE_API_URL || 'https://translate-wmjg.onrender.com'; // URL do servidor Flask
+const TRANSLATE_API_URL = process.env.TRANSLATE_API_URL || 'https://translate-wmjg.onrender.com/translate'; // URL do servidor Flask
 
 // Função para chamar a API do Wolfram Alpha
 async function consultaWolfram(input) {
