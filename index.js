@@ -30,7 +30,7 @@ async function consultaWolfram(input) {
     const respostaTraduzida = await consultaLibreTranslate(input); // Traduz a pergunta antes de enviar para Wolfram Alpha
     console.log(`Pergunta traduzida: ${respostaTraduzida}`);
 
-    const url = `http://api.wolframalpha.com/v1/result?i=${encodeURIComponent(respostaTraduzida)}&appid=${process.env.WOLFRAM_APP_ID}`;
+    const url = `http://api.wolframalpha.com/v1/result?i=${encodeURIComponent(input)}&appid=${process.env.WOLFRAM_APP_ID}`;
 
     try {
         const response = await axios.get(url);
