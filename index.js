@@ -7,7 +7,6 @@ import translate from 'translate';
 dotenv.config();
 
 translate.engine = 'libre'; // Configura para usar o LibreTranslate
-translate.from = 'auto'; // Detecta automaticamente o idioma
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,8 +16,8 @@ const WOLFRAM_APP_ID = process.env.WOLFRAM_APP_ID;
 // Função para chamar a API do Wolfram Alpha
 async function consultaWolfram(input) {
     try {
-        // Traduz a entrada para o inglês
-        const queryInEnglish = await translate(input, 'en');
+        // Traduz a entrada para o inglês assumindo que está em português
+        const queryInEnglish = await translate(input, { from: 'pt', to: 'en' });
         console.log('Pergunta traduzida para inglês:', queryInEnglish);
 
         const url = `http://api.wolframalpha.com/v1/result?i=${encodeURIComponent(queryInEnglish)}&appid=${WOLFRAM_APP_ID}`;
