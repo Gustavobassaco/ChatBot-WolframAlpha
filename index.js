@@ -47,6 +47,13 @@ app.post('/webhook', async (req, res) => {
     // Consultar o Wolfram Alpha com a pergunta traduzida
     const respostaWolfram = await consultaWolfram(query);
 
+    // Lógica para enviar uma resposta personalizada
+    if (action === 'input.welcome') {
+        return res.json({
+            fulfillmentText: 'tudo bem? como posso ajudar'
+        });
+    }
+
     return res.json({
         fulfillmentText: respostaWolfram,
     });
