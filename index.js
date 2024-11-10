@@ -2,11 +2,18 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import cors from 'cors';  // Importe o CORS
 
 dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
+
+// Configuração do CORS: Permite requisições da origem do front-end hospedado no Netlify
+const corsOptions = {
+    origin: 'https://chatbot-wolfram-alpha.netlify.app',  // URL do seu front-end no Netlify
+};
+app.use(cors(corsOptions));  // Habilita o CORS com a configuração específica
 
 const WOLFRAM_APP_ID = process.env.WOLFRAM_APP_ID;
 const TRANSLATE_API_URL = process.env.TRANSLATE_API_URL || 'https://translate-wmjg.onrender.com/translate'; // URL do servidor Flask
